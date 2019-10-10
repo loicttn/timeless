@@ -1,22 +1,26 @@
 # all databases utilities
+# used to store all instructions contect information
 import pony.orm as pony
 from database.models import State, Instruction, Register, create_db
 
 # all unicorn engine emulation utilities
+# used to emulate the execution of the binary
 from unicorn import *
 from unicorn.x86_const import *
 
 # all custom objects made from unicorn engine constants
+# used as indexes to save Register objects instances
 from utils.x86registers import x86registers_table
 
-# all capstone decompiler utilitie
+# all capstone decompiler utilities
+# used to get asm code from bytecode
 import capstone
 
-# begining of the memory segmentation of the emulated programm
+# begining of the memory segmentation of the emulated program
 STACK_BASE = 0x0
 
 # size of the emulated program
-STACK_SIZE = 1024**2  # 10 MB
+STACK_SIZE = 1024**2
 
 
 class Debugger:
@@ -31,6 +35,10 @@ class Debugger:
     def __init__(self: object, binary_infos: dict) -> None:
         """
         initiates Debugger context
+
+        creates:
+        *  database that will be used to store all debugging states
+        *  emulator to run binary and get states information
         """
         create_db()
         self.emulator = Uc(UC_ARCH_X86, UC_MODE_64)
